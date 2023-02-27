@@ -25,21 +25,10 @@
         .setAlpha(0.75);
 
       this.matter.add
-        .image(width / 2, height - 5, 'outerBox', null, { isStatic: true })
-        .setBounce(0.3)
-        .setScale(100, 1);
-
-      this.matter.add
         .image(width - 20, height / 6, 'outerBox', null, { isStatic: true })
         .setScale(45, 1)
         .setBounce(0.3)
         .setAngle(60);
-
-      this.matter.add
-        .image(width - 3, height - 125, 'outerBox', null, { isStatic: true })
-        .setScale(140, 1)
-        .setBounce(0.3)
-        .setAngle(90);
 
       this.ball = this.matter.add
         .image(width - 15, height - 15, 'ball', null, { density: 0.01 })
@@ -78,18 +67,23 @@
         vx = vx < -18 ? -18 : vx > 18 ? 18 : vx;
         vy = vy < -18 ? -18 : vy > 18 ? 18 : vy;
         this.ball?.setVelocity(vx, vy);
-        this.score += 10;
-        this.scoreText.text = `Score: ${this.score}`;
+        this.setScore(this.score + 10);
       }
     }
 
+    setScore(score) {
+      this.score = score;
+      this.scoreText.text = `Score: ${this.score}`;
+    }
+
     restart() {
+      this.score = 0;
       this.scene.restart();
     }
 
     runPlaybook() {
       this.ball.setPosition(width - 15, height - 15);
-      this.ball.setVelocity(0, -24);
+      this.ball.setVelocity(0, -28);
     }
   }
 
@@ -106,6 +100,11 @@
       matter: {
         setBounds: true,
         debug: true,
+        velocityIterations: 20,
+        positionIterations: 15,
+        runner: {
+          isFixed: true,
+        },
       },
     },
     ...opts,
